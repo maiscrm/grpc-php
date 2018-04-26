@@ -42,9 +42,16 @@ class BaseStub
      */
     public function __construct($hostname, $opts, Channel $channel = null)
     {
-        $ssl_roots = file_get_contents(
-            dirname(__FILE__).'/../../etc/roots.pem');
-        ChannelCredentials::setDefaultRootsPem($ssl_roots);
+        // https://github.com/grpc/grpc/issues/13412, https://github.com/grpc/grpc/issues/11632
+        // Because we only ever use "insecure connections" by talking to inner service
+        // We can comment the below root cert loading out until the above issue is fixed
+        // $ssl_roots = file_get_contents(
+        //     dirname(__FILE__).'/../../etc/roots.pem');
+        // ChannelCredentials::setDefaultRootsPem($ssl_roots);
+
+        if (array_key_exists('credentials', $opts) && $opts['credentials'] !== null) {
+            throw new \Exception("Credentialed connections (SSL, etc) are unsupported until grpc/grpc #13412 is resolved");
+        }
 
         $this->hostname = $hostname;
         $this->update_metadata = null;
