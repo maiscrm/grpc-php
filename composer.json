@@ -1,5 +1,5 @@
 {
-  "name": "grpc/grpc",
+  "name": "maiscrm/grpc",
   "type": "library",
   "description": "gRPC library for PHP",
   "keywords": ["rpc"],
